@@ -6,5 +6,6 @@
 ## Build
 
 From project root folder:
-1. `cmake --preset linux`
+1. `cmake --preset linux` for linux
+   `cmake --preset windows` fow windows with MinGW
 2. `cmake --build build`
