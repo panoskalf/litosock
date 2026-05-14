@@ -83,7 +83,7 @@ int main()
         }
 
         std::cout << "server: got connection from "
-        << litosock::getIPString(reinterpret_cast<addrinfo*>(&their_addr)) << "\n";
+        << litosock::getIPString(&their_addr) << "\n";
 
         // Note: Beej's C version uses fork() + sigaction to handle zombie processes.
         // We use std::thread here for cross-platform simplicity.

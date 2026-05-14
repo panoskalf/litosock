@@ -27,9 +27,12 @@ namespace litosock
     // in litosock_windows.cpp / litosock_linux.cpp.
     void platformInit();
 
-    // Extracts a human readable IP string from and addrinfo node.
+    // Extracts a human readable IP string from an addrinfo node.
     // Handles both IPv4 and IPv6, the cast dance is unavoidable with the BSD API
     std::string getIPString(const addrinfo* p);
+
+    // Extracts a human readable IP string from a sockaddr_storage struct.
+    std::string getIPString(const sockaddr_storage* ss);
 
     // Wraps addrinfo
     class Addrinfo

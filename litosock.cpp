@@ -1,4 +1,6 @@
 #include "litosock.h"
+#include <netinet/in.h>
+#include <sys/socket.h>
 
 // Ensures platformInit() runs before any litosock API is used.
 // platformInit() is defined in the platform-specific file (litosock_windows.cpp /
@@ -24,6 +26,25 @@ std::string litosock::getIPString(const addrinfo *p)
     inet_ntop(p->ai_family, addr, ipstr, sizeof(ipstr));
     return std::string(ipstr);
 }
+
+std::string litosock::getIPString(const sockaddr_storage* ss)
+{
+    char ipstr[INET6_ADDRSTRLEN];
+    void* addr;
+    if (ss->ss_family == AF_INET) // IPv4
+    {
+        auto* ipv4 = reinterpret_cast<const sockaddr_in*>(ss);
+        addr = const_cast<in_addr*>(&ipv4->sin_addr);
+    }
+    else // IPv6
+    {
+        auto* ipv6 = reinterpret_cast<const sockaddr_in6*>(ss);
+        addr = const_cast<in6_addr*>(&ipv6->sin6_addr);
+    }
+    inet_ntop(ss->ss_family, addr, ipstr, sizeof(ipstr));
+    return std::string(ipstr);
+}
+
 
 litosock::Socket::Socket(int family, int type, int protocol)
 {
