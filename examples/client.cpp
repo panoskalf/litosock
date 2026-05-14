@@ -11,22 +11,12 @@
 
 #define MAXDATASIZE 100 // max number of bytes we can get at once 
 
-// get sockaddr, IPv4 or IPv6:
-void *get_in_addr(struct sockaddr *sa)
-{
-	if (sa->sa_family == AF_INET) {
-		return &(((struct sockaddr_in*)sa)->sin_addr);
-	}
-
-	return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
 
 int main(int argc, char *argv[])
 {
 	int numbytes;  
 	char buf[MAXDATASIZE];
 	addrinfo hints{}, *p;
-	int rv;
 	char s[INET6_ADDRSTRLEN];
 
 	if (argc != 2) {

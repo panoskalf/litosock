@@ -1,6 +1,4 @@
 #include "litosock.h"
-#include <netinet/in.h>
-#include <sys/socket.h>
 
 // Ensures platformInit() runs before any litosock API is used.
 // platformInit() is defined in the platform-specific file (litosock_windows.cpp /
