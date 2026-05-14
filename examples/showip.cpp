@@ -17,26 +17,20 @@ int main(int argc, char *argv[])
 	    return 1;
 	}
 
-	struct addrinfo hints{}, *res;
+	addrinfo hints{};
 	hints.ai_family = AF_UNSPEC;  // Either IPv4 or IPv6
 	hints.ai_socktype = SOCK_STREAM;
-	int status;
 
-	if ((status = getaddrinfo(argv[1], NULL, &hints, &res) != 0))
-	{
-		std::cerr << "getaddrinfo: " << gai_strerror(status) << "\n";
-		return 2;
-	}
+	litosock::Addrinfo res(argv[1], NULL, &hints);
 
 	std::cout << "IP addresses for " << argv[1] << ":\n\n";
 
-	for(auto* p = res;p != NULL; p = p->ai_next)
+	for(auto* p = res.get(); p != NULL; p = p->ai_next)
 	{
 		std::cout << (p->ai_family == AF_INET ? "IPv4" : "IPv6")
 		<< ": " << litosock::getIPString(p) << "\n";
 	}
 
-	freeaddrinfo(res); // free the linked list
 	return 0;
 }
 

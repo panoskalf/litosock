@@ -13,7 +13,7 @@ if(WIN32)
   add_library(LitoSock STATIC litosock.cpp litosock_windows.cpp)
   # So examples can include litosock.h
   target_include_directories(LitoSock PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-  target_link_libraries(LitoSock ws2_32)
+  target_link_libraries(LitoSock PUBLIC ws2_32)
 else()
   message(STATUS "Building for Linux")
   add_library(LitoSock STATIC litosock.cpp litosock_linux.cpp)

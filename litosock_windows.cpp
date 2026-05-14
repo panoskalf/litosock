@@ -8,6 +8,10 @@ namespace
         WinsockGuard()  { WSADATA d; WSAStartup(MAKEWORD(2,2), &d); }
         ~WinsockGuard() { WSACleanup(); }
     };
-    // local instance
-    WinsockGuard winsockGuard;
 }
+
+void litosock::platformInit()
+{
+    static WinsockGuard guard;
+}
+

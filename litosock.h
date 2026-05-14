@@ -21,14 +21,18 @@
 #endif
 
 
-namespace litosock 
+namespace litosock
 {
+    // Called once at startup by litosock.cpp. Platform-specific implementation
+    // in litosock_windows.cpp / litosock_linux.cpp.
+    void platformInit();
+
     // Extracts a human readable IP string from and addrinfo node.
     // Handles both IPv4 and IPv6, the cast dance is unavoidable with the BSD API
     std::string getIPString(const addrinfo* p);
-    
+
     // Wraps addrinfo
-    class Addrinfo 
+    class Addrinfo
     {
     public:
         explicit Addrinfo(addrinfo* res) : m_res(res) {}
@@ -46,7 +50,7 @@ namespace litosock
     };
 
     // Wraps socket to ensure cleanup
-    class Socket 
+    class Socket
     {
     public:
         // Default constructor creates an empty socket with invalid fd
@@ -60,21 +64,21 @@ namespace litosock
 
         // Closes on destruction
         ~Socket();
-        
+
         // No copy
         Socket(const Socket&) = delete;
         Socket& operator=(const Socket&) = delete;
-        
+
         // Move is ok
         Socket(Socket&&) noexcept;
-        
+
         // Takes ownership of fd. Closes any previously existing socket.
         // The caller must not use fd after this call.
         void set(SocketHandle fd) noexcept;
 
         // Get the raw resource when you pass it to API functions
         SocketHandle get(void) const;
-        
+
         // Check if valid
         bool valid() const;
 

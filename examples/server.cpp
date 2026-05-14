@@ -27,12 +27,12 @@ int main()
     socklen_t sin_size;
     int yes=1;
     char s[INET6_ADDRSTRLEN];
-    
+
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE; // use my IP
-    
+
     // wraps call to getaddrinfo, keeps result addrinfo in the object, throws in failure
     litosock::Addrinfo servinfo(nullptr, PORT, &hints);
 
@@ -47,7 +47,8 @@ int main()
             continue;
         }
 
-        if (setsockopt(sock.get(), SOL_SOCKET, SO_REUSEADDR, &yes,
+        // reinterpret cast makes this cross platform
+        if (setsockopt(sock.get(), SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char*>(&yes),
                 sizeof(int)) == -1) {
             throw std::runtime_error("setsockopt\n");
         }
@@ -81,7 +82,7 @@ int main()
             continue;
         }
 
-        std::cout << "server: got connection from " 
+        std::cout << "server: got connection from "
         << litosock::getIPString(reinterpret_cast<addrinfo*>(&their_addr)) << "\n";
 
         // Note: Beej's C version uses fork() + sigaction to handle zombie processes.
