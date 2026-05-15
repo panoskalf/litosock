@@ -16,5 +16,5 @@ Meant to be read alongside Beej's guide, not as a replacement.
 
 From project root folder:
 1. `cmake --preset linux` for linux
-   `cmake --preset windows` fow windows with MinGW
+   or `cmake --preset windows` for windows
 2. `cmake --build build`
