@@ -7,14 +7,14 @@
 #include "litosock.h"
 
 
-#define PORT "3490" // the port client will be connecting to 
+#define PORT "3490" // the port client will be connecting to
 
-#define MAXDATASIZE 100 // max number of bytes we can get at once 
+#define MAXDATASIZE 100 // max number of bytes we can get at once
 
 
 int main(int argc, char *argv[])
 {
-	int numbytes;  
+	int numbytes;
 	char buf[MAXDATASIZE];
 	addrinfo hints{}, *p;
 	char s[INET6_ADDRSTRLEN];
@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
 
 	litosock::Addrinfo servinfo(argv[1], PORT, &hints);
 	// empty for now
-	litosock::Socket sock; 
+	litosock::Socket sock;
 
 	// loop through all the results and connect to the first we can
-	for(p = servinfo.get(); p != NULL; p = p->ai_next) {
+	for(p = servinfo.get(); p != nullptr; p = p->ai_next) {
         sock.set(socket(p->ai_family, p->ai_socktype,
 				p->ai_protocol));
 		if (!sock.valid()) {
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
-        std::cout << "client: attempting connection to " 
+        std::cout << "client: attempting connection to "
 		<< litosock::getIPString(p)
 		<< "\n";
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
 	std::cout << "client: connected to "
 			<< litosock::getIPString(p)
-			<< "\n"; 
+			<< "\n";
 
 	if ((numbytes = recv(sock.get(), buf, MAXDATASIZE-1, 0)) == -1) {
 	    throw std::runtime_error("recv\n");

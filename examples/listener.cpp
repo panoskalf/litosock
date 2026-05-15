@@ -11,7 +11,7 @@
 #define MAXBUFLEN 100
 
 
-int main(void)
+int main()
 {
 	addrinfo hints{}, *p;
 	int numbytes;
@@ -27,10 +27,10 @@ int main(void)
 	litosock::Socket sock;
 
 	// loop through all the results and bind to the first we can
-	for(p = servinfo.get(); p != NULL; p = p->ai_next) {
+	for(p = servinfo.get(); p != nullptr; p = p->ai_next) {
 		sock.set(socket(p->ai_family, p->ai_socktype,
 				p->ai_protocol));
-		
+
 		if (!sock.valid()) {
 			std::cerr << "listener: socket\n";
 			continue;
@@ -52,7 +52,7 @@ int main(void)
 
 	addr_len = sizeof their_addr;
 	if ((numbytes = recvfrom(sock.get(), buf, MAXBUFLEN-1 , 0,
-		(struct sockaddr *)&their_addr, &addr_len)) == -1) {
+		 reinterpret_cast<sockaddr*>(&their_addr), &addr_len)) == -1) {
 		throw std::runtime_error("recvfrom");
 	}
 

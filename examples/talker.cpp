@@ -2,7 +2,6 @@
 ** talker.cpp -- a C++ datagram "client" demo
 */
 
-#include <cstddef>
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
@@ -17,7 +16,7 @@ int main(int argc, char *argv[])
 
 	if (argc != 3) {
 		std::cerr << "usage: talker hostname message\n";
-		exit(1);
+		return 1;
 	}
 
 	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
@@ -27,7 +26,7 @@ int main(int argc, char *argv[])
 	litosock::Socket sock;
 
 	// loop through all the results and make a socket
-	for(p = servinfo.get(); p != NULL; p = p->ai_next) {
+	for(p = servinfo.get(); p != nullptr; p = p->ai_next) {
 		sock.set(socket(p->ai_family, p->ai_socktype,
 				p->ai_protocol));
 		if (!sock.valid()) {

@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 	hints.ai_family = AF_UNSPEC;  // Either IPv4 or IPv6
 	hints.ai_socktype = SOCK_STREAM;
 
-	litosock::Addrinfo res(argv[1], NULL, &hints);
+	litosock::Addrinfo res(argv[1], nullptr, &hints);
 
 	std::cout << "IP addresses for " << argv[1] << ":\n\n";
 
-	for(auto* p = res.get(); p != NULL; p = p->ai_next)
+	for(auto* p = res.get(); p != nullptr; p = p->ai_next)
 	{
 		std::cout << (p->ai_family == AF_INET ? "IPv4" : "IPv6")
 		<< ": " << litosock::getIPString(p) << "\n";

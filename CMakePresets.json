@@ -4,7 +4,6 @@
         {
             "name": "linux",
             "displayName": "Linux Debug",
-            "generator": "Unix Makefiles",
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
@@ -17,12 +16,8 @@
         },
         {
             "name": "windows",
-            "displayName": "Windows Debug",
-            "generator": "MinGW Makefiles",
+            "displayName": "Windows",
             "binaryDir": "${sourceDir}/build",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
