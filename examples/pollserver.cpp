@@ -3,7 +3,6 @@
 */
 
 #include <iostream>
-#include <sys/socket.h>
 #include <vector>
 #include "litosock.h"
 
@@ -26,17 +25,17 @@ litosock::Socket get_listener_socket(void)
 	hints.ai_flags = AI_PASSIVE;
 	litosock::Addrinfo ai(nullptr, PORT, &hints);
 	litosock::Socket listener;  // listener socket object, empty for now
-	
+
 	for(p = ai.get(); p != nullptr; p = p->ai_next) {
 		listener.set(socket(p->ai_family, p->ai_socktype,
 				p->ai_protocol));
-		if (!listener.valid()) { 
+		if (!listener.valid()) {
 			continue;
 		}
-		
+
 		// Lose the pesky "address already in use" error message
-		setsockopt(listener.get(), SOL_SOCKET, SO_REUSEADDR, &yes,
-				sizeof(int));
+		setsockopt(listener.get(), SOL_SOCKET, SO_REUSEADDR,
+					reinterpret_cast<char*>(&yes), sizeof(int));
 
 		if (bind(listener.get(), p->ai_addr, p->ai_addrlen) < 0) {
 			continue;
@@ -67,7 +66,7 @@ void handle_new_connection(SocketHandle listener, std::vector<PollFd>& pfds)
 {
 	sockaddr_storage remoteaddr; // Client address
 	socklen_t addrlen = sizeof remoteaddr;
-	
+
 	// Newly accepted socket descriptor
 	SocketHandle newfd = accept(listener, reinterpret_cast<sockaddr*>(&remoteaddr),
 			&addrlen);
@@ -80,8 +79,8 @@ void handle_new_connection(SocketHandle listener, std::vector<PollFd>& pfds)
 		// using a vector<litosock::Socket> and passing it around
 		// would work but it has drawbacks here.
 		pfds.push_back({newfd, POLLIN, 0});
-	
-		std::cout << "pollserver: new connection from " << litosock::getIPString(&remoteaddr) 
+
+		std::cout << "pollserver: new connection from " << litosock::getIPString(&remoteaddr)
 				  << " on socket " << newfd << "\n";
 	}
 }
@@ -89,7 +88,7 @@ void handle_new_connection(SocketHandle listener, std::vector<PollFd>& pfds)
 /*
  * Handle regular client data or client hangups.
  */
-void handle_client_data(SocketHandle listener, 
+void handle_client_data(SocketHandle listener,
 		std::vector<PollFd>& pfds, int& i)
 {
 	char buf[256];	// Buffer for client data
@@ -120,7 +119,7 @@ void handle_client_data(SocketHandle listener,
 
 	} else { // We got some good data from a client
 		 // newline will be in the buf
-		std::cout << "pollserver: recv from fd " << sender_fd 
+		std::cout << "pollserver: recv from fd " << sender_fd
 				  << ": " << std::string_view(buf, nbytes);
 		// Send to everyone!
 		for(int j = 0; j < static_cast<int>(pfds.size()); j++) {
