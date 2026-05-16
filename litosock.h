@@ -9,15 +9,24 @@
     using SocketHandle = SOCKET;
     constexpr SocketHandle INVALID_HANDLE = INVALID_SOCKET;
     inline void closeSocket(SocketHandle fd) { closesocket(fd); }
+    inline int pollSockets(WSAPOLLFD* pfds, ULONG nfds, INT timeout) {
+        return WSAPoll(pfds, nfds, timeout);
+    }
+    using PollFd = WSAPOLLFD;
 #else
     #include <sys/types.h>
     #include <sys/socket.h>
     #include <netdb.h>
     #include <arpa/inet.h>
     #include <unistd.h>
+    #include <poll.h>
     using SocketHandle = int;
     constexpr SocketHandle INVALID_HANDLE = -1;
     inline void closeSocket(SocketHandle fd) { ::close(fd); }
+    inline int pollSockets(pollfd* pfds, nfds_t nfds, int timeout) {
+        return ::poll(pfds, nfds, timeout);
+    }
+    using PollFd = pollfd;
 #endif
 
 
