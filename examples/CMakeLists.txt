@@ -4,6 +4,7 @@ add_executable(client client.cpp)
 add_executable(listener listener.cpp)
 add_executable(talker talker.cpp)
 add_executable(pollserver pollserver.cpp)
+add_executable(selectserver selectserver.cpp)
 
 
 target_link_libraries(showip PRIVATE LitoSock)
@@ -12,3 +13,4 @@ target_link_libraries(client PRIVATE LitoSock)
 target_link_libraries(listener PRIVATE LitoSock)
 target_link_libraries(talker PRIVATE LitoSock)
 target_link_libraries(pollserver PRIVATE LitoSock)
+target_link_libraries(selectserver PRIVATE LitoSock)
