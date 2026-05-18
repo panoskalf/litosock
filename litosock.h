@@ -20,6 +20,7 @@
     #include <arpa/inet.h>
     #include <unistd.h>
     #include <poll.h>
+    #include <sys/select.h>
     using SocketHandle = int;
     constexpr SocketHandle INVALID_HANDLE = -1;
     inline void closeSocket(SocketHandle fd) { ::close(fd); }
@@ -83,6 +84,7 @@ namespace litosock
 
         // Move is ok
         Socket(Socket&&) noexcept;
+        Socket& operator=(Socket&&) noexcept;
 
         // Takes ownership of fd. Closes any previously existing socket.
         // The caller must not use fd after this call.

@@ -75,6 +75,16 @@ litosock::Socket::Socket(Socket&& other) noexcept : m_fd(other.m_fd)
     other.m_fd = INVALID_HANDLE; // prevent double close
 }
 
+litosock::Socket& litosock::Socket::operator=(Socket&& other) noexcept 
+{
+    if (this != &other) {
+        if (valid()) closeSocket(m_fd); // close the old fd
+        m_fd = other.m_fd;
+        other.m_fd = INVALID_HANDLE;
+    }
+    return *this;
+}
+
 void litosock::Socket::set(SocketHandle fd) noexcept
 {
     SocketHandle temp = m_fd;
